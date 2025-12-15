@@ -17,20 +17,17 @@
  }
  .disposed(by: disposeBag)
  
- [기존 고정된 로직을 외부로 전달]
+ [기존 셀 설정 로직을 외부로 전달]
  
  */
 
 import UIKit
 
-class TodoDataSourceV2: NSObject, UITableViewDataSource {
+class TodoDataSourceV3: NSObject, UITableViewDataSource {
     var todoList: [TodoSolve] = []
     var tableView: UITableView? = nil
-    // 클로저를 담는 변수
-    var configureCell: ((UITableView, IndexPath, TodoSolve) -> UITableViewCell)? = nil
-    
-    // Rx버전(현재 미사용)
-    var configureCellTest: ((Int, TodoSolve, TodoSolveCell) -> Void)? = nil
+    var configureCell: ((Int, TodoSolve, TodoSolveCell) -> Void)? = nil // 클로저를 담는 변수
+    var cellId: String = ""
     
     init(todoList: [TodoSolve], tableView: UITableView) {
         self.todoList = todoList
@@ -39,7 +36,7 @@ class TodoDataSourceV2: NSObject, UITableViewDataSource {
 }
 
 // MARK: - UITableView Datasource Method
-extension TodoDataSourceV2 {
+extension TodoDataSourceV3 {
     // 하나의 섹션에 `몇개`를 보여줄 것인가
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         todoList.count
@@ -50,48 +47,26 @@ extension TodoDataSourceV2 {
         
         let cellData = todoList[indexPath.row]
         
+        let cell: TodoSolveCell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! TodoSolveCell
+        
         // MARK: - 고정된 로직을 클로저를 통해 외부로 뺀다
         // 셀을 만드는 로직 -> 매개변수로 만들자(클로저 = 로직->변수)
-        return configureCell?(tableView, indexPath, cellData) ?? UITableViewCell()
-        
-        // MARK: - 기존 고정된 로직
-        /*
-        guard let cell: TodoSolveCell = tableView.dequeueReusableCell(withIdentifier: "TodoSolveCell",
-                                                                 for: indexPath) as? TodoSolveCell else {
-            return UITableViewCell()
-        }
-        
-   
-        cell.configureCell(cellData: cellData)
-        
-        cell.isDoneChange = { [weak self] id, isDone in
-            guard let self = self else { return }
-            
-            // todo.id와 클로저로 들어온 id
-            if let foundIndex = todoList.firstIndex(where: { $0.id == id }) {
-                self.todoList[foundIndex].isDone = isDone
-                
-                // 새로고침
-                DispatchQueue.main.async {
-                    tableView.reloadRows(at: [IndexPath(row: foundIndex, section: 0)], with: .fade)
-                }
-            }
-        }
+        configureCell?(indexPath.row, cellData, cell)
         return cell
-         */
     }
 }
 
 
 // MARK: - Register
-extension TodoDataSourceV2 {
+extension TodoDataSourceV3 {
     func register(cellClass: AnyClass, forCellReuseIdentifier: String) {
         tableView?.register(cellClass, forCellReuseIdentifier: forCellReuseIdentifier)
+        self.cellId = forCellReuseIdentifier
     }
 }
 
 // MARK: - Update
-extension TodoDataSourceV2 {
+extension TodoDataSourceV3 {
     func setData(newValue: [TodoSolve]) {
         self.todoList = newValue
         self.tableView?.reloadData()

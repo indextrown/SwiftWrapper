@@ -33,6 +33,7 @@ let menuData: [MenuSection: [MenuItem]] = [
         MenuItem(title: "스크롤시 셀 데이터 재사용", viewControllerType: TodosSolveVC.self),
         MenuItem(title: "커스텀 데이터 소스", viewControllerType: CustomDataSourceVC.self),
         MenuItem(title: "커스텀 데이터 소스 V2", viewControllerType: CustomDataSourceVCV2.self),
-        MenuItem(title: "커스텀 데이터 소스 V3", viewControllerType: CustomDataSourceVCV3.self)
+        MenuItem(title: "커스텀 데이터 소스 V3", viewControllerType: CustomDataSourceVCV3.self),
+        MenuItem(title: "커스텀 데이터 소스 V4", viewControllerType: CustomDataSourceVCV3.self)
     ],
 ]

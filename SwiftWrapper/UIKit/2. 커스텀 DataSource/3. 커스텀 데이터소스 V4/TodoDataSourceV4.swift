@@ -6,25 +6,16 @@
 //
 
 /*
- [RxDataSources]
- 
- // 옵저버블이라는 데이터를 만든다
- let data = Observable<[String]>.just(["first element", "second element", "third element"])
-
- // 옵저버블이라는 데이터를 구독한다
- data.bind(to: tableView.rx.items(cellIdentifier: "Cell")) { index, model, cell in
-   cell.textLabel?.text = model
- }
- .disposed(by: disposeBag)
- 
+셀에 대한 로직을 외부로 빼고 싶을 때 해결법
+ - 외부에서 Cell을 클로저 매개변수로 받아서 자유롭게 만들도록 하자
  */
 
 import UIKit
 
-class TodoDataSourceV3: NSObject, UITableViewDataSource {
+class TodoDataSourceV4: NSObject, UITableViewDataSource {
     var todoList: [TodoSolve] = []
     var tableView: UITableView? = nil
-    var configureCell: ((Int, TodoSolve, TodoSolveCell) -> Void)? = nil // 클로저를 담는 변수
+    var configureCell: ((TodoDataSourceV4, UITableView, Int, TodoSolve, TodoSolveCell) -> Void)? = nil // 클로저를 담는 변수
     var cellId: String = ""
     
     init(todoList: [TodoSolve], tableView: UITableView) {
@@ -34,7 +25,7 @@ class TodoDataSourceV3: NSObject, UITableViewDataSource {
 }
 
 // MARK: - UITableView Datasource Method
-extension TodoDataSourceV3 {
+extension TodoDataSourceV4 {
     // 하나의 섹션에 `몇개`를 보여줄 것인가
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         todoList.count
@@ -49,14 +40,14 @@ extension TodoDataSourceV3 {
         
         // MARK: - 고정된 로직을 클로저를 통해 외부로 뺀다
         // 셀을 만드는 로직 -> 매개변수로 만들자(클로저 = 로직->변수)
-        configureCell?(indexPath.row, cellData, cell)
+        configureCell?(self, tableView, indexPath.row, cellData, cell)
         return cell
     }
 }
 
 
 // MARK: - Register
-extension TodoDataSourceV3 {
+extension TodoDataSourceV4 {
     func register(cellClass: AnyClass, forCellReuseIdentifier: String) {
         tableView?.register(cellClass, forCellReuseIdentifier: forCellReuseIdentifier)
         self.cellId = forCellReuseIdentifier
@@ -64,7 +55,7 @@ extension TodoDataSourceV3 {
 }
 
 // MARK: - Update
-extension TodoDataSourceV3 {
+extension TodoDataSourceV4 {
     func setData(newValue: [TodoSolve]) {
         self.todoList = newValue
         self.tableView?.reloadData()
