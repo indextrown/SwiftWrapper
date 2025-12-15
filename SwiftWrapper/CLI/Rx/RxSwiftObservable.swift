@@ -36,16 +36,16 @@ func runner(description: String, action: () -> Void) {
     action()
 }
 
-/**
- Observable.just()
- 오직 하나의 item을 방출하는 Sequence 생성
- (배열을 넣으면 배열 하나를 item으로 방출)
- 
- emit one
- → onNext 호출
- → print(one)
- */
 func observable_just() {
+    /**
+     Observable.just()
+     오직 하나의 item을 방출하는 Sequence 생성
+     (배열을 넣으면 배열 하나를 item으로 방출)
+     
+     emit one
+     → onNext 호출
+     → print(one)
+     */
     
     runner(description: "Observable.just()") {
         let disposeBag = DisposeBag()
@@ -77,11 +77,11 @@ func observable_just() {
     }
 }
 
-/**
- 타입 추론을 이용하여 Sequence를 생성
- - 여러 개의 값을 “순서대로 하나씩 방출”하고 싶을 때 사용
- */
 func observable_of() {
+    /**
+     타입 추론을 이용하여 Sequence를 생성
+     - 여러 개의 값을 “순서대로 하나씩 방출”하고 싶을 때 사용
+     */
     runner(description: "Observable.of()") {
         let disposeBag = DisposeBag()
         let (one, two, three) = (1, 2, 3)
@@ -94,10 +94,10 @@ func observable_of() {
     }
 }
 
-/**
- arrray 타입만 처리하여 각 요소들을 하나씩 emit 가능
- */
 func observable_from() {
+    /**
+     arrray 타입만 처리하여 각 요소들을 하나씩 emit 가능
+     */
     runner(description: "Observable.from()") {
         let disposeBag = DisposeBag()
         let arr = [1, 2, 3, 4, 5]
@@ -110,15 +110,15 @@ func observable_from() {
     }
 }
 
-/**
- 클로저 형식이며 다양한 값(onNext, onCompleted)를 생성할 수 있음
- - 파라미타로 Observer를 매개변수로 받는 클로저를 전달받는 Observable Sequence를 생성하다
- - 매개변수로 받은 Observer의 onNext, onCompleted, onError메서드를 직접 호출 가능
- - 클로저가 끝나기 전에 반드시 onCompleted이나 onError를 정확히 1번 호출해야한다
- - 그 이후로는 Observer의 다른 어떤 메서드도 호출해선 안된다
- => 언제, 어떤 값을, 어떤 순서로 방출할지 내가 직접 정하는 로우레벨 Observable
- */
 func observable_create() {
+    /**
+     클로저 형식이며 다양한 값(onNext, onCompleted)를 생성할 수 있음
+     - 파라미타로 Observer를 매개변수로 받는 클로저를 전달받는 Observable Sequence를 생성하다
+     - 매개변수로 받은 Observer의 onNext, onCompleted, onError메서드를 직접 호출 가능
+     - 클로저가 끝나기 전에 반드시 onCompleted이나 onError를 정확히 1번 호출해야한다
+     - 그 이후로는 Observer의 다른 어떤 메서드도 호출해선 안된다
+     => 언제, 어떤 값을, 어떤 순서로 방출할지 내가 직접 정하는 로우레벨 Observable
+     */
     let disposeBag = DisposeBag()
     let observable = Observable<String>.create { observer -> Disposable in
         observer.onNext("첫 번째 방출")
