@@ -111,7 +111,8 @@ class TodoSolveCell: UITableViewCell {
         self.cellData = cellData
         titleLabel.text = cellData.title
         idLabel.text = String(cellData.id.uuidString.prefix(8))
-        isDoneSwitch.isOn = cellData.isDone
+        // isDoneSwitch.isOn = cellData.isDone
+        isDoneSwitch.setOn(cellData.isDone, animated: false)
     }
     
     @objc func handleIsDone(_ sender: UISwitch) {
