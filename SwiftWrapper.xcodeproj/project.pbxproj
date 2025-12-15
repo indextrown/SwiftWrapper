@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DF3CDEC42EEEA86F004D527A /* Fakery in Frameworks */ = {isa = PBXBuildFile; productRef = DF3CDEC32EEEA86F004D527A /* Fakery */; };
+		DFE66EE02EEFD70700320D52 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = DFE66EDF2EEFD70700320D52 /* Differentiator */; };
+		DFE66EE22EEFD70700320D52 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = DFE66EE12EEFD70700320D52 /* RxDataSources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFE66EE22EEFD70700320D52 /* RxDataSources in Frameworks */,
+				DFE66EE02EEFD70700320D52 /* Differentiator in Frameworks */,
 				DF3CDEC42EEEA86F004D527A /* Fakery in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +75,8 @@
 			name = SwiftWrapper;
 			packageProductDependencies = (
 				DF3CDEC32EEEA86F004D527A /* Fakery */,
+				DFE66EDF2EEFD70700320D52 /* Differentiator */,
+				DFE66EE12EEFD70700320D52 /* RxDataSources */,
 			);
 			productName = SwiftWrapper;
 			productReference = DF3CDC7E2EEEA223004D527A /* SwiftWrapper.app */;
@@ -102,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				DF3CDEC22EEEA86F004D527A /* XCRemoteSwiftPackageReference "Fakery" */,
+				DFE66EDE2EEFD70700320D52 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DF3CDC7F2EEEA223004D527A /* Products */;
@@ -345,6 +352,14 @@
 				minimumVersion = 5.1.0;
 			};
 		};
+		DFE66EDE2EEFD70700320D52 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -352,6 +367,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DF3CDEC22EEEA86F004D527A /* XCRemoteSwiftPackageReference "Fakery" */;
 			productName = Fakery;
+		};
+		DFE66EDF2EEFD70700320D52 /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DFE66EDE2EEFD70700320D52 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = Differentiator;
+		};
+		DFE66EE12EEFD70700320D52 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DFE66EDE2EEFD70700320D52 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

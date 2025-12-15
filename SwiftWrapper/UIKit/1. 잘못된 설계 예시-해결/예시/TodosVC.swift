@@ -7,6 +7,10 @@
 
 import UIKit
 
+/*
+ UITableView는 row를 재사용하는게 아니라 셀 인스턴스를 재사용하고 그 셀 중 하나가 항상 가장 마지막에 재사용되고 있다.
+ */
+
 final class TodosVC: UIViewController {
     
     var todoList: [Todo] = []
@@ -53,11 +57,13 @@ final class TodosVC: UIViewController {
 }
 
 extension TodosVC: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
         todoList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell: TodoCell = tableView.dequeueReusableCell(withIdentifier: "TodoCell",
                                                                  for: indexPath) as? TodoCell else {
             return UITableViewCell()
@@ -70,11 +76,10 @@ extension TodosVC: UITableViewDataSource {
 }
 
 extension TodosVC: UITableViewDelegate {
-
-    func tableView(
-        _ tableView: UITableView,
-        didEndDisplaying cell: UITableViewCell,
-        forRowAt indexPath: IndexPath
+    
+    func tableView(_ tableView: UITableView,
+                   didEndDisplaying cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath
     ) {
         print()
     }
