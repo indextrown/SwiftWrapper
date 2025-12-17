@@ -27,6 +27,7 @@ enum MenuSection: String, CaseIterable {
     case section1 = "테이블 기본 개념"
     case section2 = "DataSource"
     case section3 = "RxDataSource"
+    case section4 = "CustomCollection"
 }
 
 let menuData: [MenuSection: [MenuItem]] = [
@@ -44,6 +45,16 @@ let menuData: [MenuSection: [MenuItem]] = [
     
     .section3: [
         MenuItem(title: "RxDataSource", viewControllerType: RxDataSourceVC.self),
-        MenuItem(title: "RxDataSourceV2", viewControllerType: RxDataSourceVCV2.self),
+        MenuItem(title: "RxDataSource CRUD", viewControllerType: RxDataSourceVCV2.self),
+        MenuItem(title: "RxDataSource Cell도 Rx 스타일로 변경", viewControllerType: RxDataSourceVCV3.self),
+        MenuItem(title: "RxDataSource 멀티섹션", viewControllerType: RxDataSourceVCV4.self),
+    ],
+    .section4: [
+        MenuItem(title: "CustomCollectionView", viewControllerType: CustomCollectionViewController.self),
+        MenuItem(title: "CustomCollectionViewControllerV2", viewControllerType: CustomCollectionViewControllerV2.self),
+
     ],
 ]
+
+
+

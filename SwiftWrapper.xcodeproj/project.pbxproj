@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DF3CDEC42EEEA86F004D527A /* Fakery in Frameworks */ = {isa = PBXBuildFile; productRef = DF3CDEC32EEEA86F004D527A /* Fakery */; };
+		DFC3AA002EF12C8C00FBA404 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = DFC3A9FF2EF12C8C00FBA404 /* DifferenceKit */; };
 		DFE66EE02EEFD70700320D52 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = DFE66EDF2EEFD70700320D52 /* Differentiator */; };
 		DFE66EE22EEFD70700320D52 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = DFE66EE12EEFD70700320D52 /* RxDataSources */; };
 /* End PBXBuildFile section */
@@ -29,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFC3AA002EF12C8C00FBA404 /* DifferenceKit in Frameworks */,
 				DFE66EE22EEFD70700320D52 /* RxDataSources in Frameworks */,
 				DFE66EE02EEFD70700320D52 /* Differentiator in Frameworks */,
 				DF3CDEC42EEEA86F004D527A /* Fakery in Frameworks */,
@@ -77,6 +79,7 @@
 				DF3CDEC32EEEA86F004D527A /* Fakery */,
 				DFE66EDF2EEFD70700320D52 /* Differentiator */,
 				DFE66EE12EEFD70700320D52 /* RxDataSources */,
+				DFC3A9FF2EF12C8C00FBA404 /* DifferenceKit */,
 			);
 			productName = SwiftWrapper;
 			productReference = DF3CDC7E2EEEA223004D527A /* SwiftWrapper.app */;
@@ -109,6 +112,7 @@
 			packageReferences = (
 				DF3CDEC22EEEA86F004D527A /* XCRemoteSwiftPackageReference "Fakery" */,
 				DFE66EDE2EEFD70700320D52 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				DFC3A9FE2EF12C8C00FBA404 /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DF3CDC7F2EEEA223004D527A /* Products */;
@@ -352,6 +356,14 @@
 				minimumVersion = 5.1.0;
 			};
 		};
+		DFC3A9FE2EF12C8C00FBA404 /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ra1028/DifferenceKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 		DFE66EDE2EEFD70700320D52 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
@@ -367,6 +379,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DF3CDEC22EEEA86F004D527A /* XCRemoteSwiftPackageReference "Fakery" */;
 			productName = Fakery;
+		};
+		DFC3A9FF2EF12C8C00FBA404 /* DifferenceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DFC3A9FE2EF12C8C00FBA404 /* XCRemoteSwiftPackageReference "DifferenceKit" */;
+			productName = DifferenceKit;
 		};
 		DFE66EDF2EEFD70700320D52 /* Differentiator */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -6,38 +6,16 @@
 //
 
 import UIKit
+import RxSwift
 
-/*
- [정의] - 함수 자리를 만든다
- var isDoneChange: ((_ id: UUID, _ newValue: Bool) -> Void)? = nil
- - 함수를 담을 수 있는 변수를 정의한것
- - UUID랑 Bool을 받아서 실행되는 함수 하나를 저장할 수 있는 변수인데, 아직은 비어 있을 수도 있다
- - 이 셀에서 isDone이 바뀌면 바깥에서 정해진 함수(콜백)를 호출할 수 있게 하겠다
- 
- [값 대입] - 자리에 함수를 넣는다
- cell.isDoneChange = { id, newValue in
-     print("VC에서 처리:", id, newValue)
- }
- - 정의해둔 자리에 실제 함수를 넣어줌
- - 보통 ViewController에서
- 
- [호출] - 자리에 들어 있는 함수를 실행한다
- isDoneChange?(id, sender.isOn)
- if let f = isDoneChange {
-     f(id, sender.isOn)
- }
- - 만약 이 셀에 ‘isDone이 바뀌었을 때 실행할 함수’가 있다면, 지금 Todo의 id와 새 스위치 값으로 그 함수를 호출해라
- - Cell이 매개변수(id, newValue)를 외부로 전달하고, 외부(ViewController)에서 미리 만들어 둔 함수가 그 매개변수를 받아서 사용한다
- 
-
-
- */
-
-class TodoSolveCell: UITableViewCell {
+class RxTodoCell: UITableViewCell {
     
-    var cellData: TodoSolve? = nil
-    var removeAction: ((_ id: UUID) -> Void)? = nil
-    var isDoneChange: ((_ id: UUID, _ newValue: Bool) -> Void)? = nil // uuid와 변경된 상태 전달
+    var cellData: RxTodo? = nil
+    // var removeAction: ((_ id: UUID) -> Void)? = nil
+    // var isDoneChange: ((_ id: UUID, _ newValue: Bool) -> Void)? = nil // uuid와 변경된 상태 전달
+    var disposeBag = DisposeBag()
+    var removeActionObservable: Observable<UUID> = Observable.empty()
+    var updateActionObservable: Observable<(id: UUID, newValue: Bool)> = Observable.empty( )
     
     // MARK: - UI
     let titleLabel: UILabel = {
@@ -75,8 +53,69 @@ class TodoSolveCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupLayout()
-        removeButton.addTarget(self, action:#selector(handleRemoveButton), for: .touchUpInside)
-        isDoneSwitch.addTarget(self, action: #selector(handleIsDone), for: .valueChanged)
+        
+
+        /**
+         // UI에 값을 넣는다면 to
+         viewModel.title
+             .bind(to: titleLabel.rx.text)
+         
+         // UI이벤트를 외부로 전달하면 onNext
+         isDoneSwitch.rx.isOn
+             .bind(onNext: { [weak self] isOn in
+                 guard let id = self?.cellData?.id else { return }
+                 self?.isDoneChange?(id, isOn)
+             })
+         */
+        
+        // MARK: - Switch
+        // Rx스러운방식
+        /*
+        isDoneSwitch.rx.isOn
+            .debug("[Debug] - isDoneSwitch")
+            .bind(onNext: { [weak self] isOn in
+                guard let self = self, let id = self.cellData?.id else { return }
+                isDoneChange?(id, isOn)
+            })
+            .disposed(by: disposeBag)
+         */
+        
+        
+        // MARK: - Remove
+        // 삭제1) 클로저 방식
+        /*
+        removeButton.rx.tap
+            .debug("[Debug] - removeButton")
+            .bind(onNext: { [weak self] _ in
+                guard let self = self, let id = self.cellData?.id else { return }
+                removeAction?(id)
+            })
+            .disposed(by: disposeBag)
+         */
+        
+        // 삭제2) rx 방식
+        removeActionObservable = removeButton.rx.tap
+            .debug("[Debug] - removeActionObservable")
+            .compactMap({ [weak self] _ in
+                self?.cellData?.id
+            })
+        
+        // 삭제2) rx반식
+        updateActionObservable = isDoneSwitch.rx
+            .controlEvent(.valueChanged)
+            .debug("[Debug] - isDoneSwitch") // Observable<Bool>
+            // input: Observable<Bool>
+            // output: Observable<(id: UUID, newValue: Bool)>
+            .compactMap ({ [weak self] _ -> (id: UUID, newValue: Bool)? in   // Bool → (UUID, Bool)?
+                guard let self = self,
+                        let unWrappedId = self.cellData?.id else { return nil }
+                return (id: unWrappedId, newValue: self.isDoneSwitch.isOn)
+            }) // Observable<(idL UUID, newValue: Bool)>
+
+           
+        
+        // removeButton.addTarget(self, action:#selector(handleRemoveButton), for: .touchUpInside)
+        // isDoneSwitch.addTarget(self, action: #selector(handleIsDone), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
@@ -85,7 +124,10 @@ class TodoSolveCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print(#fileID, #function, #line, "- cellData.id: \(String(describing: cellData?.id.uuidString.prefix(8) ?? nil))")
+        // print(#fileID, #function, #line, "- cellData.id: \(String(describing: cellData?.id.uuidString.prefix(8) ?? nil))")
+        
+        // MARK: - 쓰레기를 비우는 과정
+        self.disposeBag = DisposeBag()
     }
     
     // MARK: - Setup
@@ -123,7 +165,7 @@ class TodoSolveCell: UITableViewCell {
     }
     
     // MARK: - Configure
-    func configureCell(cellData: TodoSolve) {
+    func configureCell(cellData: RxTodo) {
         // print(#fileID, #function, #line, "- cellData: \(cellData)")
         self.cellData = cellData
         titleLabel.text = cellData.title
@@ -132,14 +174,14 @@ class TodoSolveCell: UITableViewCell {
         isDoneSwitch.setOn(cellData.isDone, animated: false)
     }
     
-    @objc func handleIsDone(_ sender: UISwitch) {
-        print(#fileID, #function, #line, "- id: \(cellData?.id.uuidString ?? "") sender: \(sender.isOn)")
-        guard let id = self.cellData?.id else { return }
-        isDoneChange?(id, sender.isOn)
-    }
-    
-    @objc func handleRemoveButton(_ sender: UIButton) {
-        guard let id = self.cellData?.id else { return }
-        removeAction?(id)
-    }
+//    @objc func handleIsDone(_ sender: UISwitch) {
+//        print(#fileID, #function, #line, "- id: \(cellData?.id.uuidString ?? "") sender: \(sender.isOn)")
+//        guard let id = self.cellData?.id else { return }
+//        isDoneChange?(id, sender.isOn)
+//    }
+//    
+//    @objc func handleRemoveButton(_ sender: UIButton) {
+//        guard let id = self.cellData?.id else { return }
+//        removeAction?(id)
+//    }
 }

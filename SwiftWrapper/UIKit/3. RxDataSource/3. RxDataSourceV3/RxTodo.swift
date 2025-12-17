@@ -1,14 +1,14 @@
 //
-//  Todo2.swift
+//  RxTodo.swift
 //  SwiftWrapper
 //
-//  Created by 김동현 on 12/14/25.
+//  Created by 김동현 on 12/16/25.
 //
 
 import UIKit
 import Fakery
 
-struct TodoSolve {
+struct RxTodo {
     let id: UUID = UUID()
     let title: String
     var isDone: Bool
@@ -18,23 +18,23 @@ struct TodoSolve {
         self.isDone = isDone
     }
     
-    static func getDumies(count: Int = 10) -> [TodoSolve] {
+    static func getDumies(count: Int = 10) -> [RxTodo] {
         let faker = Faker(locale: "ko")
         
         return (1...count).map { _ in
             let firstName = faker.name.firstName()
             let lastName = faker.name.lastName()
             let title = "\(lastName) \(firstName)"
-            return TodoSolve(title: title, isDone: false)
+            return RxTodo(title: title, isDone: false)
         }
     }
     
-    static func getDummy() -> TodoSolve {
+    static func getDummy() -> RxTodo {
         let faker = Faker(locale: "ko")
         
         let firstName = faker.name.firstName()
         let lastName = faker.name.lastName()
         let title = "\(lastName) \(firstName)"
-        return TodoSolve(title: title, isDone: false)
+        return RxTodo(title: title, isDone: false)
     }
 }
