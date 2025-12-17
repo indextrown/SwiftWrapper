@@ -47,7 +47,8 @@ let menuData: [MenuSection: [MenuItem]] = [
         MenuItem(title: "RxDataSource", viewControllerType: RxDataSourceVC.self),
         MenuItem(title: "RxDataSource CRUD", viewControllerType: RxDataSourceVCV2.self),
         MenuItem(title: "RxDataSource Cell도 Rx 스타일로 변경", viewControllerType: RxDataSourceVCV3.self),
-        MenuItem(title: "RxDataSource 멀티섹션", viewControllerType: RxDataSourceVCV4.self),
+        MenuItem(title: "RxDataSource 멀티섹션(Header + Footer)", viewControllerType: RxDataSourceVCV4.self),
+        MenuItem(title: "RxDataSource 멀티섹션 커스텀\n(Header + Footer)", viewControllerType: RxDataSourceVCV5.self),
     ],
     .section4: [
         MenuItem(title: "CustomCollectionView", viewControllerType: CustomCollectionViewController.self),
