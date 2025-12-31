@@ -25,9 +25,10 @@ struct MenuItem: Hashable {
 // 섹션
 enum MenuSection: String, CaseIterable {
     case section1 = "테이블 기본 개념"
-    case section2 = "DataSource"
-    case section3 = "RxDataSource"
-    case section4 = "CustomCollection"
+    case section2 = "커스텀 데이터소스"
+    case section3 = "Rx 데이터소스"
+    case section4 = "Diffable 데이터소스"
+    case section5 = "커스텀 테이블 라이브러리 구현중"
 }
 
 let menuData: [MenuSection: [MenuItem]] = [
@@ -50,12 +51,17 @@ let menuData: [MenuSection: [MenuItem]] = [
         MenuItem(title: "RxDataSource 멀티섹션(Header + Footer)", viewControllerType: RxDataSourceVCV4.self),
         MenuItem(title: "RxDataSource 멀티섹션 커스텀\n(Header + Footer)", viewControllerType: RxDataSourceVCV5.self),
     ],
+    
     .section4: [
+        MenuItem(title: "DiffableDataSource 멀티섹션\n(Header + Footer)", viewControllerType: DiffableDataSourceVC.self),
+        MenuItem(title: "DiffableDataSource 멀티섹션 커스텀\n(Header + Footer)", viewControllerType: DiffableDataSourceVCV2.self),
+    ],
+    
+    .section5: [
         MenuItem(title: "CustomCollectionView", viewControllerType: CustomCollectionViewController.self),
         MenuItem(title: "CustomCollectionViewControllerV2", viewControllerType: CustomCollectionViewControllerV2.self),
 
     ],
 ]
 
-
-
+// https://www.youtube.com/watch?v=SAEOgH26rBU&list=PLgOlaPUIbynptzdsGIg8t8Im9l1XHJEfd&index=8

@@ -1,15 +1,15 @@
 //
-//  CustomHeaderView.swift
+//  CustomFooterView.swift
 //  SwiftWrapper
 //
-//  Created by 김동현 on 12/17/25.
+//  Created by 김동현 on 12/31/25.
 //
 
 import UIKit
 
-final class CustomHeaderView: UITableViewHeaderFooterView {
+final class CustomFooterView: UITableViewHeaderFooterView {
     
-    static let identifier = "CustomHeaderView"
+    static let identifier = "CustomFooterView"
     
     private let titleLabel: UILabel = {
         let label = UILabel()

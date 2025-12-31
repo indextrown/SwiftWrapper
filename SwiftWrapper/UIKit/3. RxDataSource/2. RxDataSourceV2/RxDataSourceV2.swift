@@ -120,10 +120,14 @@ class RxDataSourceVCV2: UIViewController {
     }
     
     private func setupData() {
-        todosRelay.accept(TodoSolve.getDumies())
+        todosRelay.accept(TodoSolve.getDumies(count: 5))
     }
     
     private func setupTableView() {
+        // MARK: - 블러테스트
+        todoTableView.delegate = self
+        
+        
         todoTableView.register(TodoSolveCell.self, forCellReuseIdentifier: "TodoSolveCell")
         
         /// Observable, Subject계열은 데이터가 들어오면 새로 갱신하는 구조다(렌더링이 된다)
@@ -202,5 +206,26 @@ class RxDataSourceVCV2: UIViewController {
             todoTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             todoTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    
+    
+    
+
+}
+
+extension RxDataSourceVCV2: UITableViewDelegate {
+    func tableView(_ tableView: UITableView,
+                   willDisplay cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath) {
+        
+        guard let cell = cell as? TodoSolveCell else { return }
+        guard cell.isNewlyCreated else { return }
+        
+        // 다음 RunLoop에서 실행 (중요)
+        DispatchQueue.main.async {
+            cell.playNewCellAnimation()
+            cell.isNewlyCreated = false
+        }
     }
 }

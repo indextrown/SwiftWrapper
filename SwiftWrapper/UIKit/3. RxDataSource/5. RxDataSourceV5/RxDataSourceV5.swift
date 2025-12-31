@@ -126,9 +126,10 @@ class RxDataSourceVCV5: UIViewController {
         frontAddButton.rx.tap
             .bind(onNext: { [weak self] _ in // ControlEvent<()> -> Void
                 guard let self = self else { return }
-                var currentTodos = self.todosRelay.value
-                currentTodos.insert(RxTodoSolve.getDummy(), at: 0)
-                self.todosRelay.accept(currentTodos)
+                var currentTodoSections = self.sectionsRelay.value
+                
+                currentTodoSections[0].items.insert(RxTodoSolve(), at: 0)
+                self.sectionsRelay.accept(currentTodoSections)
             })
             .disposed(by: disposeBag)
         
@@ -142,13 +143,25 @@ class RxDataSourceVCV5: UIViewController {
               cell.removeActionObservable
                   .withUnretained(self)
                   .debug("[Debug] - removeActionObservable")
+//                  .map({ vc, uuid in
+//                      let currentTodos = vc.todosRelay.value
+//                      let filteredTodos = currentTodos.filter { $0.id != uuid }
+//                      return filteredTodos
+//                  })
                   .map({ vc, uuid in
-                      let currentTodos = vc.todosRelay.value
-                      let filteredTodos = currentTodos.filter { $0.id != uuid }
-                      return filteredTodos
+                      let currentSections: [SectionOfTodo] = vc.sectionsRelay.value
+                      
+                      let updatedSections: [SectionOfTodo] = currentSections.map ({ aSection in // let
+                          var updatedSection: SectionOfTodo = aSection
+                          let updaedItems: [RxTodoSolve] = aSection.items.filter { $0.id != uuid }
+                          
+                          updatedSection.items = updaedItems
+                          return updatedSection
+                      })
+                      return updatedSections
                   })
                   .bind(onNext: { [weak self] filteredTodos in
-                      self?.todosRelay.accept(filteredTodos)
+                      self?.sectionsRelay.accept(filteredTodos)
                   })
                   .disposed(by: cell.disposeBag)
                  
@@ -170,9 +183,9 @@ class RxDataSourceVCV5: UIViewController {
 //          titleForHeaderInSection: { dataSource, sectionIndex -> String? in
 //              dataSource.sectionModels[sectionIndex].header
 //          },
-          titleForFooterInSection: { dataSource, sectionIndex -> String? in
-              dataSource.sectionModels[sectionIndex].footer
-          }
+//          titleForFooterInSection: { dataSource, sectionIndex -> String? in
+//              dataSource.sectionModels[sectionIndex].footer
+//          }
         )
         
        
@@ -187,11 +200,17 @@ class RxDataSourceVCV5: UIViewController {
         todoTableView.register(CustomHeaderView.self,
                                forHeaderFooterViewReuseIdentifier: CustomHeaderView.identifier)
         
+        todoTableView.register(CustomFooterView.self,
+                               forHeaderFooterViewReuseIdentifier: CustomFooterView.identifier
+        )
+        
         todoTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
         
     }
+    
+    
     
     private func setupLayout() {
         view.addSubview(todoTableView)
@@ -214,5 +233,18 @@ extension RxDataSourceVCV5: UITableViewDelegate {
         // let sectionData = "\(section + 1) 번째 섹션이다."
         headerView?.configure(title: sectionsRelay.value[section].header)
         return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CustomFooterView.identifier
+        ) as? CustomFooterView
+        
+        footerView?.configure(title: sectionsRelay.value[section].footer)
+        return footerView
     }
 }

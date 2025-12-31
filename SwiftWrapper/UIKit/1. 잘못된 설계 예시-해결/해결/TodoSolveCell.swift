@@ -35,6 +35,7 @@ import UIKit
 
 class TodoSolveCell: UITableViewCell {
     
+    var isNewlyCreated = true
     var cellData: TodoSolve? = nil
     var removeAction: ((_ id: UUID) -> Void)? = nil
     var isDoneChange: ((_ id: UUID, _ newValue: Bool) -> Void)? = nil // uuid와 변경된 상태 전달
@@ -141,5 +142,13 @@ class TodoSolveCell: UITableViewCell {
     @objc func handleRemoveButton(_ sender: UIButton) {
         guard let id = self.cellData?.id else { return }
         removeAction?(id)
+    }
+    
+    func playNewCellAnimation() {
+        contentView.backgroundColor = .systemRed
+
+        UIView.animate(withDuration: 0.6) {
+            self.contentView.backgroundColor = .clear
+        }
     }
 }

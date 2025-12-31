@@ -25,9 +25,9 @@ struct SwiftWrapperApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear {
-                    run(RxExample.current)
-                }
+//                .onAppear {
+//                    run(RxExample.current)
+//                }
         }
     }
 }

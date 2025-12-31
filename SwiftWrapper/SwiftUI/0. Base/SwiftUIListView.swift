@@ -13,7 +13,7 @@ struct SwiftUIListView: View {
             List {
                 Section("섹션1") {
                     NavigationLink("샘플1") {
-                        SampleView()
+                        SegmentView()
                     }
                 }
             }

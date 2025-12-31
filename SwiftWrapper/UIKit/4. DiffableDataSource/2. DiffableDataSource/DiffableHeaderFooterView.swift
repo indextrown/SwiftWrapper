@@ -1,5 +1,5 @@
 //
-//  CustomHeaderView.swift
+//  DiffableHeaderFooterView.swift
 //  SwiftWrapper
 //
 //  Created by 김동현 on 12/17/25.
@@ -7,9 +7,7 @@
 
 import UIKit
 
-final class CustomHeaderView: UITableViewHeaderFooterView {
-    
-    static let identifier = "CustomHeaderView"
+final class DiffableHeaderFooterView: UITableViewHeaderFooterView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -40,3 +38,5 @@ final class CustomHeaderView: UITableViewHeaderFooterView {
         titleLabel.text = title
     }
 }
+
+extension DiffableHeaderFooterView: ReuseIdentifiable {}

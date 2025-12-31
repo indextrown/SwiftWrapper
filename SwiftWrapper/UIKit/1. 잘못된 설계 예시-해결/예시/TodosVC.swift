@@ -71,6 +71,7 @@ extension TodosVC: UITableViewDataSource {
         
         let cellData = todoList[indexPath.row]
         cell.configureCell(cellData: cellData)
+
         return cell
     }
 }
@@ -83,4 +84,19 @@ extension TodosVC: UITableViewDelegate {
     ) {
         print()
     }
+    
+    func tableView(_ tableView: UITableView,
+                   willDisplay cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath) {
+        
+        guard let cell = cell as? TodoSolveCell else { return }
+        guard cell.isNewlyCreated else { return }
+        
+        // 다음 RunLoop에서 실행 (중요)
+        DispatchQueue.main.async {
+            cell.playNewCellAnimation()
+            cell.isNewlyCreated = false
+        }
+    }
 }
+

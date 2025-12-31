@@ -1,18 +1,18 @@
 //
-//  TodoCell.swift
+//  DiffableCell.swift
 //  SwiftWrapper
 //
-//  Created by 김동현 on 12/14/25.
+//  Created by 김동현 on 12/17/25.
 //
 
 import UIKit
 
-class TodoCell: UITableViewCell {
-    var isNewlyCreated = true
-    var cellData: Todo? = nil
+final class DiffableTodoCell: UITableViewCell {
+    var cellData: DiffableTodo? = nil
+    var removeAction: ((_ id: UUID) -> Void)? = nil
     
     // MARK: - UI
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .label
@@ -20,7 +20,7 @@ class TodoCell: UITableViewCell {
         return label
     }()
     
-    private let idLabel: UILabel = {
+    let idLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12, weight: .regular)
         label.textColor = .secondaryLabel
@@ -28,7 +28,16 @@ class TodoCell: UITableViewCell {
         return label
     }()
     
-    private let isDoneSwitch: UISwitch = {
+    let removeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("삭제", for: .normal)
+        button.setTitleColor(.systemRed, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    let isDoneSwitch: UISwitch = {
         let uiSwitch = UISwitch()
         uiSwitch.translatesAutoresizingMaskIntoConstraints = false
         return uiSwitch
@@ -38,6 +47,7 @@ class TodoCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupLayout()
+        removeButton.addTarget(self, action:#selector(handleRemoveButton), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -46,7 +56,7 @@ class TodoCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print(#fileID, #function, #line, "- cellData.id: \(String(describing: cellData?.id.uuidString.prefix(8) ?? nil))")
+        print("♻️ prepareForReuse - \(ObjectIdentifier(self))")
     }
     
     // MARK: - Setup
@@ -55,6 +65,8 @@ class TodoCell: UITableViewCell {
         contentView.addSubview(isDoneSwitch)
         contentView.addSubview(titleLabel)
         contentView.addSubview(idLabel)
+        contentView.addSubview(removeButton)
+        contentView.addSubview(isDoneSwitch)
     }
     
     private func setupLayout() {
@@ -71,6 +83,10 @@ class TodoCell: UITableViewCell {
             idLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             idLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             
+            // RemoveButton
+            removeButton.trailingAnchor.constraint(equalTo: isDoneSwitch.leadingAnchor, constant: -12),
+            removeButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
             // Switch (오른쪽)
             isDoneSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             isDoneSwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -78,20 +94,22 @@ class TodoCell: UITableViewCell {
     }
     
     // MARK: - Configure
-    func configureCell(cellData: Todo) {
+    func configureCell(cellData: DiffableTodo) {
+        print("🎨 configureCell - id:", cellData.id)
         // print(#fileID, #function, #line, "- cellData: \(cellData)")
         self.cellData = cellData
         titleLabel.text = cellData.title
         idLabel.text = String(cellData.id.uuidString.prefix(8))
-        isDoneSwitch.isOn = cellData.isDone
+        // isDoneSwitch.isOn = cellData.isDone
+        isDoneSwitch.setOn(cellData.isDone, animated: false)
     }
-    
-    func playNewCellAnimation() {
-        contentView.backgroundColor = .systemRed
+}
 
-        UIView.animate(withDuration: 0.6) {
-            self.contentView.backgroundColor = .clear
-        }
+extension DiffableTodoCell: ReuseIdentifiable {}
+
+extension DiffableTodoCell {
+    @objc func handleRemoveButton(_ sender: UIButton) {
+        guard let id = self.cellData?.id else { return }
+        removeAction?(id)
     }
-
 }

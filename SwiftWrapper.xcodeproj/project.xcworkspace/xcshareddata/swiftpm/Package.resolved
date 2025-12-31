@@ -1,5 +1,5 @@
 {
-  "originHash" : "5ef51d98ded5ea0a276cb3118080207a6e043001dfa66f44eb4b9d4f9da8bee0",
+  "originHash" : "9f437b6dbd000e16af845c3ecde268a6e0452d8eaf016e50b086002104f21acf",
   "pins" : [
     {
       "identity" : "differencekit",
@@ -20,6 +20,15 @@
       }
     },
     {
+      "identity" : "karrotlistkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/daangn/KarrotListKit",
+      "state" : {
+        "revision" : "d608169605ec440000267ea05fe71787f0b08bf0",
+        "version" : "4.7.0"
+      }
+    },
+    {
       "identity" : "rxdatasources",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RxSwiftCommunity/RxDataSources.git",
@@ -35,6 +44,15 @@
       "state" : {
         "revision" : "5004a18539bd68905c5939aa893075f578f4f03d",
         "version" : "6.9.1"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
       }
     }
   ],
