@@ -15,6 +15,9 @@ struct SwiftUIListView: View {
                     NavigationLink("샘플1") {
                         SegmentView()
                     }
+                    NavigationLink("샘플4") {
+                        SegmentView4()
+                    }
                 }
             }
         }
